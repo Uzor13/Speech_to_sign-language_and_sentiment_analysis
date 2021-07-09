@@ -1,13 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3b9d2b9-be1f-4322-84fa-4f8a2be3c415" name="Default Changelist" comment="" />
+    <list default="true" id="a3b9d2b9-be1f-4322-84fa-4f8a2be3c415" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/craco.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/controllers/getVideoPath.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/controllers/getVideosFromDB.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/db/connectDB.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/models/signLanguage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/routes/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/Sentiment analysis-amico.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/Speech to text-pana.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/Video upload-pana.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Footer/Footer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/Header.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/Logo.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/Nav.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/NavItem.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Header/NavSocials.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Input.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/About.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/FileUploads.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/Home.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/Sentiment.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/Sign.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/setupTests.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1urZWPUQIxoyLWD0r8okr9EF35n" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -15,7 +74,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/amplify/backend/amplify-meta.json" />
     <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/assets/img" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -24,6 +85,59 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\src\assets\img" />
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\backend" />
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\server" />
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\server\public\videos" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\src\components\pages" />
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\src\components\Header" />
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\server\public" />
+      <recent name="C:\Users\EPCPA\Desktop\Projects\Personal\aws\server" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.start">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/server/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/server/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.dev" />
+        <item itemvalue="npm.start (1)" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -36,10 +150,75 @@
       <workItem from="1625425701984" duration="2939000" />
       <workItem from="1625434124872" duration="1588000" />
       <workItem from="1625438581077" duration="1388000" />
+      <workItem from="1625463174548" duration="29320000" />
+      <workItem from="1625734992803" duration="4051000" />
+      <workItem from="1625739283349" duration="32295000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="310" y="150" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1625502191829">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="310" y="150" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.720@0.0.1280.720" timestamp="1625502191829" />
+    <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1625508049754">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="371" y="107" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.720@0.0.1280.720" timestamp="1625508049754" />
+    <state width="1260" height="170" key="GridCell.Tab.0.bottom" timestamp="1625760710387">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state width="1260" height="170" key="GridCell.Tab.0.bottom/0.0.1280.720@0.0.1280.720" timestamp="1625760710387" />
+    <state width="1260" height="170" key="GridCell.Tab.0.center" timestamp="1625760710387">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state width="1260" height="170" key="GridCell.Tab.0.center/0.0.1280.720@0.0.1280.720" timestamp="1625760710387" />
+    <state width="1260" height="170" key="GridCell.Tab.0.left" timestamp="1625760710386">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state width="1260" height="170" key="GridCell.Tab.0.left/0.0.1280.720@0.0.1280.720" timestamp="1625760710386" />
+    <state width="1260" height="170" key="GridCell.Tab.0.right" timestamp="1625760710387">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state width="1260" height="170" key="GridCell.Tab.0.right/0.0.1280.720@0.0.1280.720" timestamp="1625760710387" />
+    <state x="199" y="95" key="IDE.errors.dialog" timestamp="1625509660160">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="199" y="95" key="IDE.errors.dialog/0.0.1280.720@0.0.1280.720" timestamp="1625509660160" />
+    <state x="335" y="93" width="1095" height="535" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1625739257537">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="335" y="93" width="1095" height="535" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1280.720@0.0.1280.720" timestamp="1625739257537" />
+    <state x="93" y="93" width="1095" height="535" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1625739086593">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="93" y="93" width="1095" height="535" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1280.720@0.0.1280.720" timestamp="1625739086593" />
+    <state x="414" y="270" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1625500443238">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="414" y="270" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.720@0.0.1280.720" timestamp="1625500443238" />
+    <state x="297" y="161" width="672" height="677" key="run.anything.popup" timestamp="1625831366234">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="297" y="161" width="672" height="677" key="run.anything.popup/0.0.1280.720@0.0.1280.720" timestamp="1625831366234" />
+    <state x="303" y="41" width="672" height="678" key="search.everywhere.popup" timestamp="1625503609341">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="303" y="41" width="672" height="678" key="search.everywhere.popup/0.0.1280.720@0.0.1280.720" timestamp="1625503609341" />
   </component>
 </project>
