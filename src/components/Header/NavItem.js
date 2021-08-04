@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {AmplifySignOut} from "@aws-amplify/ui-react";
 
 const NavItem = () => {
     return (

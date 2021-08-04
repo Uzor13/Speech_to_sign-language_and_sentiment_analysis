@@ -1,8 +1,7 @@
 import Amplify, {Storage} from 'aws-amplify'
 import awsconfig from '../../aws-exports'
 import React, {useState} from 'react';
-import VideoUpload  from '../../assets/img/Video upload-pana.svg'
-import SentimentImg from "../../assets/img/Sentiment analysis-amico.svg";
+import VideoUpload from '../../assets/img/Video upload-pana.svg'
 
 Amplify.configure(awsconfig)
 
@@ -42,9 +41,8 @@ const FileUpload = () => {
                     </label>
                     <input type="file"
                            id='videos'
-                           accept='.video/mp4'
                            onChange={onChange}/>
-                    {progress && <p className='text-lg text-indigo-700 pt-6'>{progress}</p> }
+                    {progress && <p className='text-lg text-indigo-700 pt-6'>{progress}</p>}
                     {error && (
                         <p className='text-lg text-red-600 pt-6'>Error: {error}</p>
                     )}
