@@ -27,14 +27,18 @@ const Sign = ({response}) => {
 
     const getVideo = async () => {
 
+
         try {
-            await Storage.get(`${lowerWords}.mp4`, {
-                download: false
-            })
-                .then(item => {
-                    setVideoPath(item)
+            await lowerWords.forEach(word => {
+                 Storage.get(`${word}.mp4`, {
+                    download: false
                 })
-                .catch(e => setError(e))
+                    .then(item => {
+                        setVideoPath(item)
+                    })
+                    .catch(e => setError(e))
+            })
+
 
         } catch (e) {
             setError(`Error: ${e}`)
@@ -54,7 +58,6 @@ const Sign = ({response}) => {
                 }
                 <p>{error}</p>
             </div>
-            <Input/>
         </div>
     );
 };

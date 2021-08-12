@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Amplify, {Storage} from "aws-amplify";
 
 import awsconfig from '../aws-exports'
+import natural from "natural";
 
 Amplify.configure(awsconfig)
 
@@ -10,16 +11,28 @@ const Input = () => {
     const [videoPath, setVideoPath] = useState(undefined);
     const [error, setError] = useState('');
 
+    const tokenizer = new natural.WordTokenizer();
+
+    const tokenizedResponse = tokenizer.tokenize(inputText)
+    console.log(tokenizer.tokenize(inputText))
+
+
+    const lowerWords = tokenizedResponse.map(word => {
+        return word.toLowerCase()
+    })
+
     const getVideo = async () => {
 
         try {
-            await Storage.get(`${inputText}.mp4`, {
-                download: false
-            })
-                .then(item => {
-                    setVideoPath(item)
+                Storage.get(`${lowerWords}.mp4`, {
+                    download: false
                 })
-                .catch(e => setError(e))
+                    .then(item => {
+                        setVideoPath(item)
+                        console.log(videoPath)
+                    })
+                    .catch(e => setError(e))
+
 
         } catch (e) {
             setError(`Error: ${e}`)
@@ -38,11 +51,11 @@ const Input = () => {
             <button onClick={getVideo} className='bg-indigo-500 text-white ml-6 px-2 py-1 rounded-md'>
                 Get Video from Text
             </button>
+            {videoPath &&
+            <video src={videoPath} type="video/mp4" className='h-48 w-full rounded-md mt-4' controls autoPlay/>
+            }
             <div className='flex flex-col justify-center items-center'>
-                {videoPath &&
-                <video src={videoPath} type="video/mp4" className='h-48 w-56 rounded-md mt-4' controls autoPlay/>
-                }
-                <p>{error}</p>
+                <p>{error.message}</p>
             </div>
 
         </div>

@@ -22,6 +22,7 @@ import Footer from "./components/Footer/Footer";
 
 //Router
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import Input from "./components/Input";
 
 //Styled Components
 const Container = styled.section`
@@ -162,12 +163,18 @@ function App() {
                         <Route path='/' exact>
                             <Home/>
                         </Route>
-                        <Route path='/sign'>
+                        <Route path='/speech'>
                             <div className='flex flex-col items-center h-full w-full py-4'>
                                 <h1 className='font-bold text-3xl text-gray-700'>Speech to Sign Language</h1>
                                 <AudioRecorder finishRecording={convertFromBuffer}/>
                                 <p className='font-medium text-lg text-gray-700'>{response}</p>
                                 <Sign response={response}/>
+                            </div>
+                        </Route>
+                        <Route path='/text'>
+                            <div className='flex flex-col items-center h-full w-full py-4'>
+                                <h1 className='font-bold text-3xl text-gray-700'>Text to Sign Language</h1>
+                                <Input/>
                             </div>
                         </Route>
                         <Route path='/sentiment'>
