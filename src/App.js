@@ -147,7 +147,7 @@ function App() {
                 source: {
                     bytes
                 },
-                language: "en-GB", // other options are "en-GB", "fr-FR", "fr-CA", "es-US"
+                language: "en-US", // other options are "en-GB", "fr-FR", "fr-CA", "es-US"
             },
         }).then(({transcription: {fullText}}) => setResponse(fullText))
             .catch(err => setResponse(JSON.stringify(err, null, 2)))
@@ -195,13 +195,7 @@ function App() {
 
     ) : <AmplifyAuthContainer>
         <AmplifyAuthenticator usernameAlias='email'>
-            <AmplifySignUp
-                slot='sign-up'
-                formFields={[
-                    {type: 'email'},
-                    {type: 'password'}
-                ]}
-            />
+            <AmplifySignUp/>
         </AmplifyAuthenticator>
     </AmplifyAuthContainer>
 
