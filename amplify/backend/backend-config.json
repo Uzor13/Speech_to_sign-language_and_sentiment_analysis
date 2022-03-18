@@ -1,0 +1,33 @@
+{
+  "auth": {
+    "awsf5309309": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
+  "predictions": {
+    "speech": {
+      "providerPlugin": "awscloudformation",
+      "service": "Transcribe",
+      "convertType": "transcription"
+    },
+    "speechGenerator": {
+      "providerPlugin": "awscloudformation",
+      "service": "Polly",
+      "convertType": "speechGenerator"
+    },
+    "sentiment": {
+      "providerPlugin": "awscloudformation",
+      "service": "Comprehend",
+      "interpretType": "interpretText"
+    }
+  },
+  "storage": {
+    "videos": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
+  }
+}

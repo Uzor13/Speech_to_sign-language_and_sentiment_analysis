@@ -52,29 +52,26 @@ function App() {
     function AudioRecorder(props) {
         const [recording, setRecording] = useState(false);
         const [micStream, setMicStream] = useState();
-
         const [audioBuffer] = useState(
-            (function () {
+            (function() {
                 let buffer = [];
-
                 function add(raw) {
                     buffer = buffer.concat(...raw);
                     return buffer;
                 }
-
                 function newBuffer() {
                     console.log("resetting buffer");
                     buffer = [];
                 }
 
                 return {
-                    reset: function () {
+                    reset: function() {
                         newBuffer();
                     },
-                    addData: function (raw) {
+                    addData: function(raw) {
                         return add(raw);
                     },
-                    getData: function () {
+                    getData: function() {
                         return buffer;
                     }
                 };
@@ -85,12 +82,12 @@ function App() {
             console.log('start recording');
             audioBuffer.reset();
 
-            window.navigator.mediaDevices.getUserMedia({video: false, audio: true}).then((stream) => {
+            window.navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {
                 const startMic = new mic();
 
                 startMic.setStream(stream);
                 startMic.on('data', (chunk) => {
-                    const raw = mic.toRaw(chunk);
+                    var raw = mic.toRaw(chunk);
                     if (raw == null) {
                         return;
                     }
@@ -105,7 +102,7 @@ function App() {
 
         async function stopRecording() {
             console.log('stop recording');
-            const {finishRecording} = props;
+            const { finishRecording } = props;
 
             micStream.stop();
             setMicStream(null);
@@ -147,9 +144,9 @@ function App() {
                 source: {
                     bytes
                 },
-                language: "en-US", // other options are "en-GB", "fr-FR", "fr-CA", "es-US"
+                // language: "en-US", // other options are "en-GB", "fr-FR", "fr-CA", "es-US"
             },
-        }).then(({transcription: {fullText}}) => setResponse(fullText))
+        }).then(({ transcription: { fullText } }) => setResponse(fullText))
             .catch(err => setResponse(JSON.stringify(err, null, 2)))
     }
 

@@ -1,0 +1,13 @@
+{
+    "resourceName": "speech",
+    "convertPolicyName": "transcriptionPolicy3f2134fd",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "convertType": "transcription",
+    "language": "en-GB",
+    "access": "authAndGuest"
+}

@@ -4,7 +4,6 @@ import natural from 'natural'
 //AWS Config
 import Amplify, {Storage} from 'aws-amplify'
 import awsconfig from '../../aws-exports'
-import Input from "../Input";
 
 Amplify.configure(awsconfig)
 
@@ -30,7 +29,7 @@ const Sign = ({response}) => {
 
         try {
             await lowerWords.forEach(word => {
-                 Storage.get(`${word}.mp4`, {
+                Storage.get(`${word}.mp4`, {
                     download: false
                 })
                     .then(item => {
@@ -53,6 +52,8 @@ const Sign = ({response}) => {
                         className='mt-6 bg-indigo-500 text-white ml-6 px-2 py-2 rounded-md'
                 >Get Video from Speech
                 </button>
+                <p>The sign language videos: Alphabet, Apple, Daily, Drink, Empty Head, Father, Girl, Must, None, Number
+                    (1 -10), Perfect, Pick on, Search, Three</p>
                 {videoPath &&
                 <video src={videoPath} type="video/mp4" controls autoPlay/>
                 }
