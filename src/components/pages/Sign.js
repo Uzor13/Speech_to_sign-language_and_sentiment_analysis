@@ -52,7 +52,7 @@ const Sign = ({response}) => {
                         className='mt-6 bg-indigo-500 text-white ml-6 px-2 py-2 rounded-md'
                 >Get Video from Speech
                 </button>
-                <p>The sign language videos: Alphabet, Apple, Daily, Drink, Empty Head, Father, Girl, Must, None, Number
+                <p className="mt-4 mb-3">The sign language videos: Alphabet, Apple, Daily, Drink, Empty Head, Father, Girl, Must, None, Number
                     (1 -10), Perfect, Pick on, Search, Three</p>
                 {videoPath &&
                 <video src={videoPath} type="video/mp4" controls autoPlay/>

@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3b9d2b9-be1f-4322-84fa-4f8a2be3c415" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/About.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/Sign.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/Sign.js" afterDir="false" />
-    </list>
+    <list default="true" id="a3b9d2b9-be1f-4322-84fa-4f8a2be3c415" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -135,7 +129,7 @@
       <workItem from="1629293809806" duration="378000" />
       <workItem from="1629368384844" duration="13000" />
       <workItem from="1633039072814" duration="2242000" />
-      <workItem from="1647552297441" duration="1596000" />
+      <workItem from="1647552297441" duration="2264000" />
     </task>
     <task id="LOCAL-00001" summary="Separated text to sign to its own page">
       <created>1628754118597</created>

@@ -51,6 +51,8 @@ const Input = () => {
             <button onClick={getVideo} className='bg-indigo-500 text-white ml-6 px-2 py-1 rounded-md'>
                 Get Video from Text
             </button>
+            <p className="mt-4 mb-3">The sign language videos: Alphabet, Apple, Daily, Drink, Empty Head, Father, Girl, Must, None, Number
+                (1 -10), Perfect, Pick on, Search, Three</p>
             {videoPath &&
             <video src={videoPath} type="video/mp4" className='h-48 w-full rounded-md mt-4' controls autoPlay/>
             }
