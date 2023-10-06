@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import './App.css';
 
 //AWS Amplify components
-import Amplify from "aws-amplify";
+import {Amplify} from "aws-amplify";
 import awsExports from "./aws-exports";
 import {AmplifyAuthContainer, AmplifyAuthenticator, AmplifySignUp} from '@aws-amplify/ui-react'
 import {AmazonAIPredictionsProvider, Predictions} from '@aws-amplify/predictions';
