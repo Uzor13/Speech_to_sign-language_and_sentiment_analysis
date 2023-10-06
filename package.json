@@ -51,7 +51,7 @@
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
     "autoprefixer": "9",
-    "jest": "^29.7.0",
+    "jest": "26.6.0",
     "postcss": "7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
