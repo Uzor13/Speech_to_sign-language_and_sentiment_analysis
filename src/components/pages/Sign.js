@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import natural from 'natural'
 
 //AWS Config
-import Amplify, {Storage} from 'aws-amplify'
-import awsconfig from '../../aws-exports'
+import {Storage, Amplify} from 'aws-amplify'
+import awsConfig from '../../aws-exports'
 
-Amplify.configure(awsconfig)
+
+Amplify.configure(awsConfig)
 
 
 const Sign = ({response}) => {
