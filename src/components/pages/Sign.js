@@ -11,6 +11,8 @@ Amplify.configure(awsconfig)
 const Sign = ({response}) => {
 
     const [videoPath, setVideoPath] = useState(undefined);
+    const [videoPaths, setVideoPaths] = useState([]);
+    const lowerWordsArray = ["alphabet", "apple", "daily", /* Add more words */];
     const [error, setError] = useState('');
 
     const tokenizer = new natural.WordTokenizer();
@@ -25,24 +27,35 @@ const Sign = ({response}) => {
 
 
     const getVideo = async () => {
-
-
         try {
-            await lowerWords.forEach(word => {
-                Storage.get(`${word}.mp4`, {
-                    download: false
-                })
-                    .then(item => {
-                        setVideoPath(item)
-                    })
-                    .catch(e => setError(e))
-            })
+            const fetchedVideoPaths = [];
+            const errors = [];
 
+            await Promise.all(lowerWords.map(async (word) => {
+                try {
+                    const item = await Storage.get(`${word}.mp4`, { download: false });
+                    fetchedVideoPaths.push(item);
+                } catch (e) {
+                    errors.push(e);
+                }
+            }));
 
+            // Now you have an array of video paths and an array of errors
+            // Now you have an array of video paths and an array of errors
+            console.log('Video Paths:', fetchedVideoPaths);
+            console.log('Errors:', errors);
+
+            // Here, you can set or display the videos one after the other
+            // For example, you could use a loop to process the video paths
+            if (fetchedVideoPaths.length > 0) {
+                setVideoPaths(fetchedVideoPaths);
+            } else {
+                setError('No videos found.');
+            }
         } catch (e) {
-            setError(`Error: ${e}`)
+            setError(`Error: ${e}`);
         }
-    }
+    };
 
 
     return (
@@ -54,9 +67,16 @@ const Sign = ({response}) => {
                 </button>
                 <p className="mt-4 mb-3">The sign language videos: Alphabet, Apple, Daily, Drink, Empty Head, Father, Girl, Must, None, Number
                     (1 -10), Perfect, Pick on, Search, Three</p>
-                {videoPath &&
-                <video src={videoPath} type="video/mp4" controls autoPlay/>
-                }
+                {videoPaths.length > 0 && (
+                    <div>
+                        {videoPaths.map((videoPath, index) => (
+                            <div key={index}>
+                                <video src={videoPath} type="video/mp4" controls autoPlay />
+                                <br />
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <p>{error}</p>
             </div>
         </div>
