@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Amplify, {Storage} from "aws-amplify";
+import {Amplify, Storage} from "aws-amplify";
 
 import awsconfig from '../aws-exports'
 import natural from "natural";

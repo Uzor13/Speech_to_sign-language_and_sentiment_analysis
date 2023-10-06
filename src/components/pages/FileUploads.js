@@ -1,4 +1,4 @@
-import Amplify, {Storage} from 'aws-amplify'
+import {Amplify, Storage} from 'aws-amplify'
 import awsconfig from '../../aws-exports'
 import React, {useState} from 'react';
 import VideoUpload from '../../assets/img/Video upload-pana.svg'
