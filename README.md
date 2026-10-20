@@ -157,6 +157,18 @@ Vite · React 19 · TypeScript · Tailwind v4 · react-router 7 · Vitest ·
 and Whisper only inside a worker, spawned on demand — so routes that do not need
 them never download them.
 
+## Deploying
+
+`vercel.json` pins the build (`npm run build` → `dist`) and adds the SPA
+rewrite that client-side routing needs: `/speech` and friends are not files on
+disk, so without it a direct visit or refresh returns 404. Vercel checks the
+filesystem before applying rewrites, so real assets and `/signs/manifest.json`
+are still served as themselves.
+
+It is committed rather than configured in the dashboard on purpose — project
+settings are invisible from the repo, and this project had a stale `craco build`
+command sitting in them long after craco was gone.
+
 ## History
 
 This replaces an earlier version built on AWS Amplify (Cognito, Transcribe,
