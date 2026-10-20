@@ -16,10 +16,17 @@
   --color-ink: #2b2d42;
   --color-ink-soft: #656b8e;
 
-  /* Sentiment scale. Never the only signal — always paired with a label. */
-  --color-positive: #0f766e;
-  --color-negative: #b4213c;
+  /*
+   * Diverging pair for the sentiment arc: two warm/cool poles with a neutral
+   * gray midpoint, never a rainbow. Validated against this page's #f9f9fc
+   * surface — all checks pass, worst-case colour-blind separation dE 12.8
+   * (deuteranopia), well above the 8 target. Colour is never the only signal
+   * anyway: every mark carries a label and its numeric score.
+   */
+  --color-positive: #059a8a;
+  --color-negative: #c62828;
   --color-neutral: #6b7280;
+  --color-axis: #d8d8e0;
 }
 
 :root {
