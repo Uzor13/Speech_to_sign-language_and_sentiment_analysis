@@ -2,14 +2,14 @@ import type { Dictation } from '@/hooks/useDictation';
 
 /** Lets the user choose between the browser's recogniser and the local model. */
 export function EngineToggle({ dictation }: { dictation: Dictation }) {
-  const { engine, support, canUseLocal, useLocalEngine, isListening } = dictation;
+  const { engine, support, canUseLocal, useLocalEngine, isListening, downloadMb } = dictation;
 
   // Only worth showing when there is a genuine choice to make.
   if (!canUseLocal || !support.usable) return null;
 
   const options = [
     { id: 'browser' as const, label: support.browserName, hint: 'Instant, streams word by word' },
-    { id: 'local' as const, label: 'On device', hint: 'Private, ~40 MB once' },
+    { id: 'local' as const, label: 'On device', hint: `Private, ~${downloadMb} MB once` },
   ];
 
   return (

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import { useLocalDictation } from './useLocalDictation';
 import { getSpeechSupport, type SpeechSupport } from '@/lib/speech/support';
+import { MODEL_DOWNLOAD_MB } from '@/lib/speech/localTypes';
 import type { RecognitionError, RecognitionStatus, TranscriptSegment } from '@/lib/speech/types';
 
 export type DictationEngine = 'browser' | 'local' | 'none';
@@ -20,6 +21,8 @@ export interface Dictation {
   loadProgress: number | null;
   /** On-device only: which backend ended up being used. */
   device: 'webgpu' | 'wasm' | null;
+  /** On-device only: roughly how large the one-time download is, in MB. */
+  downloadMb: number;
   /** True when the local engine is available but not yet chosen. */
   canUseLocal: boolean;
   useLocalEngine: (use: boolean) => void;
@@ -100,6 +103,7 @@ export function useDictation(
     error: active.error,
     loadProgress: engine === 'local' ? local.loadProgress : null,
     device: engine === 'local' ? local.device : null,
+    downloadMb: MODEL_DOWNLOAD_MB[local.plannedDevice],
     canUseLocal,
     useLocalEngine,
     start: active.start,

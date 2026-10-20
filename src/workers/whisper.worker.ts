@@ -29,7 +29,10 @@ async function load(model: string, device: 'webgpu' | 'wasm'): Promise<void> {
     // keeps the WebAssembly path small enough to be usable.
     dtype:
       device === 'webgpu'
-        ? { encoder_model: 'fp32', decoder_model_merged: 'q4' }
+        ? // fp16 for the encoder halves it against fp32 with no practical
+          // accuracy loss. The decoder stays q4: its *fp16* export is the one
+          // that will not build a session at all.
+          { encoder_model: 'fp16', decoder_model_merged: 'q4' }
         : { encoder_model: 'q8', decoder_model_merged: 'q8' },
     progress_callback: (progress: unknown) => {
       const p = progress as { status?: string; file?: string; progress?: number };

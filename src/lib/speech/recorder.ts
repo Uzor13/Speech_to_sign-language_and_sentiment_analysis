@@ -28,6 +28,8 @@ export interface Recorder {
   getDuration: () => number;
   /** True while the recent window is below the silence threshold. */
   isSilent: () => boolean;
+  /** True when the whole buffer is near-silent — nothing worth transcribing. */
+  isAllSilent: () => boolean;
   reset: () => void;
   stop: () => void;
 }
@@ -126,6 +128,9 @@ export async function startRecorder(options: RecorderOptions = {}): Promise<Reco
       if (length < window) return false;
       return rms(flatten(length - window)) < SILENCE_RMS;
     },
+    // Whisper invents words from silence — "you" and "Thank you." especially —
+    // so a near-silent buffer is never worth sending.
+    isAllSilent: () => length === 0 || rms(flatten(0)) < SILENCE_RMS,
     reset: () => {
       chunks = [];
       length = 0;

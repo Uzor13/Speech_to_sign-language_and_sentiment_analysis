@@ -7,7 +7,7 @@ import type { Dictation } from '@/hooks/useDictation';
  * locally instead.
  */
 export function EngineNotice({ dictation }: { dictation: Dictation }) {
-  const { engine, support, loadProgress, device } = dictation;
+  const { engine, support, loadProgress, device, downloadMb } = dictation;
 
   if (engine === 'none') {
     return (
@@ -25,7 +25,7 @@ export function EngineNotice({ dictation }: { dictation: Dictation }) {
     return (
       <Banner tone="info" title="Downloading the speech model">
         <p>
-          About 40&nbsp;MB, once. It is then cached by your browser, and
+          About {downloadMb}&nbsp;MB, once. It is then cached by your browser, and
           transcription runs on your machine from then on — the audio never leaves it.
         </p>
         <div

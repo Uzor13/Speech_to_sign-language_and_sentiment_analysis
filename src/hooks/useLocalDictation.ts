@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { startRecorder, type Recorder } from '@/lib/speech/recorder';
 import {
   DEFAULT_WHISPER_MODEL,
+  preferredDevice,
   type WhisperRequest,
   type WhisperResponse,
 } from '@/lib/speech/localTypes';
@@ -13,7 +14,10 @@ export interface LocalDictationState {
   /** 0–100 while the model downloads; null once ready. */
   loadProgress: number | null;
   ready: boolean;
+  /** Set once the model is loaded. */
   device: 'webgpu' | 'wasm' | null;
+  /** Known up front, so the download notice can state the right size. */
+  plannedDevice: 'webgpu' | 'wasm';
   isListening: boolean;
   finalTranscript: string;
   interimTranscript: string;
@@ -177,6 +181,31 @@ export function useLocalDictation(
     utteranceStartRef.current = now;
   }, [safely, writeInterim]);
 
+  /**
+   * Wait for the transcription in flight, then commit it.
+   *
+   * Bounded on purpose: if the worker never answers, committing what we have
+   * is better than leaving the interim text on screen for ever. The request id
+   * is bumped afterwards so a late reply cannot repopulate the interim with
+   * text that has already been committed.
+   */
+  const settleThenCommit = useCallback(
+    (id: number, after?: () => void) => {
+      const startedAt = Date.now();
+      const settle = setInterval(() => {
+        const stillWaiting = busyRef.current && requestRef.current === id;
+        if (stillWaiting && Date.now() - startedAt < 4000) return;
+
+        clearInterval(settle);
+        busyRef.current = false;
+        commit();
+        requestRef.current += 1;
+        after?.();
+      }, 120);
+    },
+    [commit],
+  );
+
   /** One pass: transcribe what has been said so far, and commit if it ended. */
   const readyRef = useRef(false);
 
@@ -208,18 +237,13 @@ export function useLocalDictation(
     send({ type: 'transcribe', id: requestRef.current, audio });
 
     if (quietLongEnough || tooLong) {
-      // Wait for this pass to land, then close the utterance out.
-      const id = requestRef.current;
-      const settle = setInterval(() => {
-        if (busyRef.current && requestRef.current === id) return;
-        clearInterval(settle);
-        commit();
+      settleThenCommit(requestRef.current, () => {
         recorder.reset();
         silenceSinceRef.current = null;
         safely(() => setElapsed(0));
-      }, 120);
+      });
     }
-  }, [commit, safely, send]);
+  }, [safely, send, settleThenCommit]);
 
   const start = useCallback(() => {
     if (listeningRef.current) return;
@@ -228,7 +252,7 @@ export function useLocalDictation(
     setListening(true);
     setError(null);
     setStatus('requesting');
-    send({ type: 'load', model, device: 'gpu' in navigator ? 'webgpu' : 'wasm' });
+    send({ type: 'load', model, device: preferredDevice() });
 
     void startRecorder()
       .then((recorder) => {
@@ -269,27 +293,31 @@ export function useLocalDictation(
     const recorder = recorderRef.current;
     setStatus('stopping');
 
-    // Final pass over whatever is left, so the last words are not lost.
-    if (readyRef.current && recorder && recorder.getDuration() >= MIN_UTTERANCE_SECONDS) {
-      requestRef.current += 1;
-      const id = requestRef.current;
-      busyRef.current = true;
-      send({ type: 'transcribe', id, audio: recorder.getAudio() });
+    // Final pass over whatever is left, so the last words are not lost — but
+    // not over a buffer that is only silence, which Whisper would turn into a
+    // confident "you" or "Thank you."
+    const worthTranscribing =
+      readyRef.current &&
+      recorder &&
+      recorder.getDuration() >= MIN_UTTERANCE_SECONDS &&
+      !recorder.isAllSilent();
 
-      const settle = setInterval(() => {
-        if (busyRef.current && requestRef.current === id) return;
-        clearInterval(settle);
-        commit();
-        safely(() => setStatus('idle'));
-      }, 120);
+    if (worthTranscribing) {
+      requestRef.current += 1;
+      busyRef.current = true;
+      send({ type: 'transcribe', id: requestRef.current, audio: recorder.getAudio() });
+      settleThenCommit(requestRef.current, () => safely(() => setStatus('idle')));
     } else {
+      // Nothing more to transcribe: drop any interim so it cannot linger
+      // beside the text that was already committed.
+      writeInterim('');
       safely(() => setStatus('idle'));
     }
 
     recorder?.stop();
     recorderRef.current = null;
     setElapsed(0);
-  }, [commit, safely, send]);
+  }, [safely, send, settleThenCommit, writeInterim]);
 
   const reset = useCallback(() => {
     setSegments([]);
@@ -318,6 +346,7 @@ export function useLocalDictation(
     loadProgress,
     ready: device !== null,
     device,
+    plannedDevice: preferredDevice(),
     isListening: listening && status !== 'error',
     finalTranscript,
     interimTranscript,

@@ -89,10 +89,16 @@ fails with a `network` error — which looks like "you are offline" to someone w
 is not. Checking that the constructor exists is not enough.
 
 **On-device recognition** (`src/workers/whisper.worker.ts`) is the fallback, and
-is also selectable anywhere: Whisper runs locally through transformers.js, on
-WebGPU where available and WebAssembly otherwise. The model is ~40 MB, fetched
-once from Hugging Face and then served from the browser cache; after that the
-audio never leaves the machine.
+is also selectable anywhere: `whisper-base.en` runs locally through
+transformers.js, on WebGPU where available and WebAssembly otherwise. It is
+fetched once from Hugging Face and then served from the browser cache; after
+that the audio never leaves the machine.
+
+The download differs by backend, so the UI states the one that applies rather
+than a single number: **~165 MB on WebGPU** (fp16 encoder + q4 decoder) and
+**~77 MB on WebAssembly** (int8 throughout). Note that a whole-model `fp16`
+export will not build an ONNX session at all — "Subgraph output (logits) is an
+outer scope value" — which is why the precision is set per module.
 
 Whisper is not a streaming model, so live captions come from re-running it over
 the growing utterance roughly every 1.5 s and replacing the interim text. A
