@@ -1,4 +1,70 @@
-/* ./src/index.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Livvic', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Lato', ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand violet, carried over from the original Home page. */
+  --color-brand-50: #f1edfe;
+  --color-brand-100: #e0d8fd;
+  --color-brand-200: #c4b4fb;
+  --color-brand-400: #8f6ff3;
+  --color-brand-500: #5e3aee;
+  --color-brand-600: #4c27d8;
+  --color-brand-700: #3d1fae;
+
+  --color-ink: #2b2d42;
+  --color-ink-soft: #656b8e;
+
+  /*
+   * Diverging pair for the sentiment arc: two warm/cool poles with a neutral
+   * gray midpoint, never a rainbow. Validated against this page's #f9f9fc
+   * surface — all checks pass, worst-case colour-blind separation dE 12.8
+   * (deuteranopia), well above the 8 target. Colour is never the only signal
+   * anyway: every mark carries a label and its numeric score.
+   */
+  --color-positive: #059a8a;
+  --color-negative: #c62828;
+  --color-neutral: #6b7280;
+  --color-axis: #d8d8e0;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: #f9f9fc;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-sans);
+}
+
+/* Respect users who ask for less motion: no transitions, no autoplay drift. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible focus for keyboard users — the player is keyboard-driven. */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}

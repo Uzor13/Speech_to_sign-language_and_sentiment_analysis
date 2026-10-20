@@ -1,0 +1,27 @@
+{
+  "_howToAddASign": [
+    "1. Drop a short, silent clip in public/signs/clips/ (mp4 or webm).",
+    "2. Add an entry below: gloss is UPPERCASE, file is relative to basePath.",
+    "3. Reload. No rebuild, no code change — this file is read at runtime.",
+    "Aliases are the English words that should resolve to this clip.",
+    "Any gloss with no entry here is fingerspelled instead, so an empty",
+    "entries list is a working state, not a broken one.",
+    "Run `npm run manifest` to generate these entries from the clips folder.",
+    "Letter images are optional: list the ones you add in letters.available",
+    "and they replace the drawn handshape cards automatically."
+  ],
+  "version": 1,
+  "basePath": "/signs",
+  "dialect": "asl",
+  "defaults": {
+    "clipMs": 1200,
+    "letterMs": 450,
+    "pauseMs": 300
+  },
+  "letters": {
+    "dir": "letters",
+    "ext": "png",
+    "available": []
+  },
+  "entries": []
+}
