@@ -12,6 +12,12 @@ const TONE: Record<ArcPoint['label'], { fill: string; text: string }> = {
 const MIN_HEIGHT_PERCENT = 1.5;
 
 /**
+ * Cap the mark width. With only two or three sentences a flexed bar becomes a
+ * saturated block, which reads loud; saturated fills belong on small marks.
+ */
+const MAX_BAR_WIDTH = 44;
+
+/**
  * How the feeling moves across an utterance, one signed bar per sentence.
  *
  * A single headline number flattens "I loved it but the ending was awful" to
@@ -68,8 +74,9 @@ export function SentimentArc({ arc }: { arc: ArcPoint[] }) {
               >
                 <div
                   aria-hidden="true"
-                  className="absolute inset-x-0"
+                  className="absolute left-1/2 w-full -translate-x-1/2"
                   style={{
+                    maxWidth: `${MAX_BAR_WIDTH}px`,
                     height: `${magnitude}%`,
                     background: tone.fill,
                     opacity: isActive ? 1 : 0.88,

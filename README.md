@@ -1,70 +1,122 @@
-# Getting Started with Create React App
+# Speech to Sign Language and Sentiment Analysis
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Speak or type English. The app transcribes it, translates it into sign language
+gloss, plays the signs, and shows how the sentiment moves across what you said.
 
-## Available Scripts
+**It runs entirely in your browser.** No account, no backend, no API keys.
 
-In the project directory, you can run:
+| Route | What it does |
+|---|---|
+| `/live` | Speak once — transcript, signs and sentiment arc fill in together |
+| `/speech` | Speak, and see it signed |
+| `/text` | Type instead. Works in every browser, with or without a microphone |
+| `/sentiment` | Speak, and see the sentiment sentence by sentence |
+| `/signs` | What the app can sign, what it spells, and how to add more |
 
-### `yarn start`
+```bash
+npm install
+npm run dev
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Other scripts: `npm run test`, `npm run typecheck`, `npm run build`,
+`npm run manifest`.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Adding a sign clip
 
-### `yarn test`
+This is the thing you are most likely to want to do, so it takes one file and
+one line of JSON — no rebuild and no code change.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Put a short, silent clip in `public/signs/clips/`, for example `father.mp4`.
+2. Add an entry to `public/signs/manifest.json`:
 
-### `yarn build`
+```json
+{
+  "gloss": "FATHER",
+  "file": "clips/father.mp4",
+  "aliases": ["dad", "papa"],
+  "durationMs": 1400
+}
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Reload. The manifest is read at runtime.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`gloss` is the uppercase sign name the translator produces; `aliases` are
+English words that should also resolve to this clip. With more than a handful
+of clips, `npm run manifest -- --write` generates the entries from whatever is
+in the folder, preserving aliases you have already written.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Letter images are optional. Put `a.png` … `z.png` in `public/signs/letters/` and
+list them under `letters.available`; they replace the drawn handshape cards
+automatically.
 
-### `yarn eject`
+**The app works with no assets at all.** With an empty manifest every word is
+fingerspelled, using cards that describe each handshape. That is a working
+state, not a broken one — every clip you add is an upgrade, never a
+prerequisite.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## How it works
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Everything under `src/lib/` is pure functions that know nothing about React,
+the DOM, or the network. Hooks adapt them to React; components render. Anything
+derivable from the transcript is a `useMemo`, never state.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**Speech** (`src/lib/speech`, `src/hooks/useSpeechRecognition.ts`) — the Web
+Speech API, with live interim captions. Note two things: Firefox has no
+`SpeechRecognition` at all, so the app detects that and offers typing instead;
+and Chrome sends audio to Google's recogniser, so `/speech` needs a network
+connection even though this app has no backend of its own. Both are stated in
+the UI rather than buried here.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**Translation** (`src/lib/gloss`) — normalize → split clauses → tokenize → tag →
+expand numbers → apply ordered grammar rules → gloss. ASL is not word-for-word
+English: articles and the copula are dropped, verbs are uninflected with tense
+carried by a separate sign, negation moves relative to the verb, wh-words go
+last, and names are fingerspelled.
 
-## Learn More
+```
+I am going to the store tomorrow  ->  TOMORROW ME GO STORE
+My father is not here             ->  MY FATHER HERE NOT
+Where are you going?              ->  YOU GO WHERE WH-Q
+She has 25 cats                   ->  SHE HAVE NUMBER-25 CAT
+My name is Peter                  ->  MY NAME fs:P-E-T-E-R
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+That table lives in `src/lib/gloss/translate.test.ts` and is the acceptance
+criteria for the grammar. Rules never delete words — they mark them dropped and
+record which rule did it, which is what lets the UI explain *why* the gloss
+looks the way it does.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The engine is dialect-agnostic. Everything language-specific — rule order, the
+lexicon, the fingerspelling alphabet — sits behind the `Dialect` interface, with
+ASL shipped. See `src/lib/gloss/dialects/bsl/README.md` for what adding British
+Sign Language needs (chiefly: its alphabet is two-handed, so the handshape
+descriptions cannot be reused).
 
-### Code Splitting
+**Signs** (`src/lib/signs`) — a gloss resolves through: names are always spelled
+→ exact gloss → alias → whole-number clip → digit by digit → spell the word.
+Pure and synchronous, so sign order is guaranteed rather than depending on
+network timing. The last step is the floor: a word without a clip is spelled,
+never silently skipped.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Sentiment** (`src/lib/sentiment`) — VADER, client-side. VADER rather than a
+plain AFINN sum because AFINN scores *"not good"* as positive: only "good" is in
+its lexicon. VADER handles negation, intensifiers and but-contrast, which are
+everywhere in speech. The result is a per-sentence arc, not one number — a
+single score flattens *"I loved it but the ending was awful"* to neutral.
 
-### Analyzing the Bundle Size
+Speech recognition emits no punctuation at all, so sentence splitting falls back
+to the recogniser's own finals (breath groups) and then to discourse markers.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Stack
 
-### Making a Progressive Web App
+Vite · React 19 · TypeScript · Tailwind v4 · react-router 7 · Vitest ·
+`compromise` (part-of-speech tagging) · `vader-sentiment`. Both libraries load
+as lazy chunks, so routes that do not need them never download them.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## History
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This replaces an earlier version built on AWS Amplify (Cognito, Transcribe,
+Comprehend, Polly, S3), Azure Text Analytics, and an unused Express/MongoDB
+server. All three are gone, along with the credentials that were committed to
+this repository — **those keys were exposed in git history and have been
+rotated**. The current app needs no credentials at all, which is the point.
