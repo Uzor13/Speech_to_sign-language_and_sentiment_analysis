@@ -126,12 +126,15 @@ describe('useSpeechRecognition', () => {
     expect(result.current.error?.code).toBe('restart-budget');
   });
 
-  it('explains that a network error means the audio goes to a server', () => {
+  it('explains a network error without claiming the user is offline', () => {
+    // It means the browser could not reach a speech *service*, which is not
+    // the same as having no connection.
     const { recognition, result } = setup();
     act(() => result.current.start());
     act(() => recognition.emitError('network'));
 
-    expect(result.current.error?.message).toMatch(/internet connection/i);
+    expect(result.current.error?.message).toMatch(/could not reach/i);
+    expect(result.current.error?.message).not.toMatch(/needs an internet connection/i);
   });
 
   it('stops listening without restarting when asked to stop', () => {

@@ -69,11 +69,27 @@ the DOM, or the network. Hooks adapt them to React; components render. Anything
 derivable from the transcript is a `useMemo`, never state.
 
 **Speech** (`src/lib/speech`, `src/hooks/useSpeechRecognition.ts`) — the Web
-Speech API, with live interim captions. Note two things: Firefox has no
-`SpeechRecognition` at all, so the app detects that and offers typing instead;
-and Chrome sends audio to Google's recogniser, so `/speech` needs a network
-connection even though this app has no backend of its own. Both are stated in
-the UI rather than buried here.
+Speech API, with live interim captions. Recognition is **not** done on your
+device: the browser ships the audio to its own speech service, so `/speech`
+needs a connection even though this app has no backend.
+
+Browser support is the awkward part, and `getSpeechSupport()` exists because
+checking that the constructor exists is not enough:
+
+| Browser | What happens |
+|---|---|
+| Chrome, Edge | Works |
+| Safari | Works, via Apple's servers |
+| **Brave** | Ships the API with **no service behind it** — always fails |
+| Firefox | No `SpeechRecognition` at all |
+
+Brave is the trap. It exposes `webkitSpeechRecognition`, so naive feature
+detection says "supported", but Brave removed the Google speech service the API
+depends on, and every attempt fails with a `network` error — which looks like
+"you are offline" to someone who is not. The app detects Brave up front, says so
+plainly, and does not offer a microphone button that cannot work.
+
+Typing is always available on every page, in every browser.
 
 **Translation** (`src/lib/gloss`) — normalize → split clauses → tokenize → tag →
 expand numbers → apply ordered grammar rules → gloss. ASL is not word-for-word

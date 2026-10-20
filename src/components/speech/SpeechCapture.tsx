@@ -36,9 +36,9 @@ export function SpeechCapture({ lang = 'en-US' }: { lang?: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {!speech.isSupported && <UnsupportedBanner />}
+      {!speech.support.usable && <UnsupportedBanner support={speech.support} />}
 
-      {speech.isSupported && (
+      {speech.support.usable && (
         <div className="flex flex-wrap items-center gap-3">
           <MicButton listening={speech.isListening} onStart={speech.start} onStop={speech.stop} />
           <Button variant="ghost" onClick={reset} disabled={!text && !speech.transcript}>
@@ -65,13 +65,15 @@ export function SpeechCapture({ lang = 'en-US' }: { lang?: string }) {
       */}
       <TranscriptInput
         onSubmit={(value) => setText(value, 'typed')}
-        label={speech.isSupported ? 'Or type it instead' : 'Type instead'}
+        label={speech.support.usable ? 'Or type it instead' : 'Type instead'}
       />
 
-      {speech.isSupported && (
+      {speech.support.usable && (
         <p className="text-xs text-slate-400">
-          Recognition runs through your browser. Chrome sends the audio to Google to transcribe
-          it, so this needs an internet connection — nothing is sent anywhere by this app itself.
+          Recognition runs through your browser, not on your device:{' '}
+          {speech.support.browserName} sends the audio to{' '}
+          {speech.support.vendor === 'apple' ? 'Apple' : 'its speech service'} to transcribe it,
+          so it needs a connection. This app itself sends nothing anywhere.
         </p>
       )}
     </div>

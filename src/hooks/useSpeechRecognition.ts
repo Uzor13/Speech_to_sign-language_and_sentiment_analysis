@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { describeRecognitionError, getSpeechRecognitionCtor } from '@/lib/speech/support';
+import {
+  describeRecognitionError,
+  getSpeechRecognitionCtor,
+  getSpeechSupport,
+} from '@/lib/speech/support';
+import type { SpeechSupport } from '@/lib/speech/support';
 import type { RecognitionError, RecognitionStatus, TranscriptSegment } from '@/lib/speech/types';
 
 export interface UseSpeechRecognitionOptions {
@@ -15,7 +20,10 @@ export interface UseSpeechRecognitionOptions {
 
 export interface UseSpeechRecognitionResult {
   status: RecognitionStatus;
+  /** The API exists. Not the same as it working — see `support`. */
   isSupported: boolean;
+  /** What this browser can actually do, including forks that ship a dead API. */
+  support: SpeechSupport;
   isListening: boolean;
   finalTranscript: string;
   interimTranscript: string;
@@ -52,9 +60,12 @@ export function useSpeechRecognition(
     return Ctor ? new Ctor() : null;
   }, [createRecognition]);
 
-  const [isSupported] = useState(() => factory() !== null);
+  // Support is read from the factory, so an injected recogniser counts as a
+  // working API while a browser-level block (Brave) still applies.
+  const [support] = useState<SpeechSupport>(() => getSpeechSupport(factory() !== null));
+  const isSupported = support.hasApi;
   const [status, setStatus] = useState<RecognitionStatus>(() =>
-    factory() !== null ? 'idle' : 'unsupported',
+    support.usable ? 'idle' : 'unsupported',
   );
   const [segments, setSegments] = useState<TranscriptSegment[]>([]);
   const [interimTranscript, setInterim] = useState('');
@@ -126,7 +137,7 @@ export function useSpeechRecognition(
     };
 
     recognition.onerror = (event) => {
-      const described = describeRecognitionError(event.error);
+      const described = describeRecognitionError(event.error, support);
       safely(() => setError(described));
       if (described.terminal) {
         shouldListenRef.current = false;
@@ -173,10 +184,10 @@ export function useSpeechRecognition(
     };
 
     return recognition;
-  }, [factory, lang, continuous, interimResults, autoRestart, safely]);
+  }, [factory, lang, continuous, interimResults, autoRestart, safely, support]);
 
   const start = useCallback(() => {
-    if (!isSupported || shouldListenRef.current) return;
+    if (!support.usable || shouldListenRef.current) return;
 
     recognitionRef.current ??= createInstance();
     const recognition = recognitionRef.current;
@@ -193,7 +204,7 @@ export function useSpeechRecognition(
     } catch {
       // start() throws if it is already running, which is harmless.
     }
-  }, [isSupported, createInstance]);
+  }, [support.usable, createInstance]);
 
   const stop = useCallback(() => {
     shouldListenRef.current = false;
@@ -241,6 +252,7 @@ export function useSpeechRecognition(
   return {
     status,
     isSupported,
+    support,
     isListening: status === 'listening' || status === 'requesting',
     finalTranscript,
     interimTranscript,
