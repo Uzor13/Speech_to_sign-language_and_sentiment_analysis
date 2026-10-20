@@ -1,4 +1,6 @@
 import { PageHeading } from '@/components/layout/PageHeading';
+import { SecondarySection } from '@/components/layout/SecondarySection';
+import { SignPipeline } from '@/components/signs/SignPipeline';
 import { SpeechCapture } from '@/components/speech/SpeechCapture';
 import { SentimentPanel } from '@/components/sentiment/SentimentPanel';
 import { useTranscript } from '@/state/TranscriptContext';
@@ -28,6 +30,17 @@ export default function SentimentPage() {
 
         <SentimentPanel text={text} segments={segments} />
       </div>
+
+      {text.trim() && (
+        <SecondarySection
+          title="The same words, signed"
+          hint="Press play when you want to watch it — it will not start on its own."
+        >
+          {/* autoPlay off on purpose: signing is secondary here, and a player
+              that starts by itself while you are reading scores is a nuisance. */}
+          <SignPipeline text={text} autoPlay={false} compact />
+        </SecondarySection>
+      )}
     </div>
   );
 }

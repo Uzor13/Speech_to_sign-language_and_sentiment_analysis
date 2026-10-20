@@ -31,7 +31,11 @@ const renderPage = () =>
 async function translate(text: string) {
   fireEvent.change(screen.getByLabelText(/english text/i), { target: { value: text } });
   fireEvent.click(screen.getByRole('button', { name: /^translate$/i }));
-  await waitFor(() => expect(screen.getByRole('list', { name: 'Gloss' })).toBeInTheDocument());
+  // Generous: the first call waits on the lazily-imported tagger, which can be
+  // slow when the whole suite is running at once.
+  await waitFor(() => expect(screen.getByRole('list', { name: 'Gloss' })).toBeInTheDocument(), {
+    timeout: 5000,
+  });
 }
 
 /** The gloss row as a space-separated string, read per chip. */

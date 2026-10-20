@@ -1,11 +1,13 @@
 import { PageHeading } from '@/components/layout/PageHeading';
+import { SecondarySection } from '@/components/layout/SecondarySection';
+import { SentimentPanel } from '@/components/sentiment/SentimentPanel';
 import { SpeechCapture } from '@/components/speech/SpeechCapture';
 import { SignPipeline } from '@/components/signs/SignPipeline';
 import { useTranscript } from '@/state/TranscriptContext';
 import speechIllustration from '@/assets/illustrations/speech-to-text.svg';
 
 export default function SpeechToSignPage() {
-  const { text } = useTranscript();
+  const { text, segments } = useTranscript();
 
   return (
     <div>
@@ -28,6 +30,12 @@ export default function SpeechToSignPage() {
 
         <SignPipeline text={text} />
       </div>
+
+      {text.trim() && (
+        <SecondarySection title="How it sounded" hint="The sentiment of what you just said.">
+          <SentimentPanel text={text} segments={segments} compact />
+        </SecondarySection>
+      )}
     </div>
   );
 }

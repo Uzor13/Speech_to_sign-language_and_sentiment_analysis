@@ -16,13 +16,20 @@ interface SignPipelineProps {
   text: string;
   topicComment?: boolean;
   autoPlay?: boolean;
+  /** Constrain the width where the signs are a secondary view on the page. */
+  compact?: boolean;
 }
 
 /**
  * Text in, signs out: the one implementation of the pipeline, shared by
  * /text, /speech and /live so there is never more than one.
  */
-export function SignPipeline({ text, topicComment = false, autoPlay }: SignPipelineProps) {
+export function SignPipeline({
+  text,
+  topicComment = false,
+  autoPlay,
+  compact,
+}: SignPipelineProps) {
   const { registry, loading } = useSignManifest();
   const { gloss } = useGloss(text, { topicComment });
 
@@ -34,7 +41,7 @@ export function SignPipeline({ text, topicComment = false, autoPlay }: SignPipel
   const nothingToSign = text.trim().length > 0 && sequence.steps.length === 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4 ${compact ? 'mx-auto w-full max-w-2xl' : ''}`}>
       {gloss.glosses.length > 0 && <GlossStrip glosses={gloss.glosses} />}
 
       <SignSequencePlayer

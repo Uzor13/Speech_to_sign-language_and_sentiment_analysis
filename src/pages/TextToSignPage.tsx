@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import { PageHeading } from '@/components/layout/PageHeading';
+import { SecondarySection } from '@/components/layout/SecondarySection';
+import { SentimentPanel } from '@/components/sentiment/SentimentPanel';
 import { Button } from '@/components/ui/Button';
 import { TextArea } from '@/components/ui/TextArea';
 import { SignPipeline } from '@/components/signs/SignPipeline';
@@ -94,6 +96,12 @@ export default function TextToSignPage() {
 
         <SignPipeline text={text} topicComment={topicComment} />
       </div>
+
+      {text.trim() && (
+        <SecondarySection title="How it reads" hint="The sentiment of the text you entered.">
+          <SentimentPanel text={text} compact />
+        </SecondarySection>
+      )}
     </div>
   );
 }

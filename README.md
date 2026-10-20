@@ -73,21 +73,33 @@ Speech API, with live interim captions. Recognition is **not** done on your
 device: the browser ships the audio to its own speech service, so `/speech`
 needs a connection even though this app has no backend.
 
-Browser support is the awkward part, and `getSpeechSupport()` exists because
-checking that the constructor exists is not enough:
+There are two engines, picked by `useDictation`:
 
-| Browser | What happens |
+| Browser | Engine |
 |---|---|
-| Chrome, Edge | Works |
-| Safari | Works, via Apple's servers |
-| **Brave** | Ships the API with **no service behind it** — always fails |
-| Firefox | No `SpeechRecognition` at all |
+| Chrome, Edge | Browser API — instant, streams word by word |
+| Safari | Browser API, via Apple's servers |
+| **Brave** | Ships the API with **no service behind it**, so: on-device |
+| Firefox | No `SpeechRecognition` at all, so: on-device |
 
-Brave is the trap. It exposes `webkitSpeechRecognition`, so naive feature
-detection says "supported", but Brave removed the Google speech service the API
-depends on, and every attempt fails with a `network` error — which looks like
-"you are offline" to someone who is not. The app detects Brave up front, says so
-plainly, and does not offer a microphone button that cannot work.
+Brave is the trap that motivated `getSpeechSupport()`. It exposes
+`webkitSpeechRecognition`, so naive feature detection says "supported", but
+Brave removed the Google speech service the API depends on and every attempt
+fails with a `network` error — which looks like "you are offline" to someone who
+is not. Checking that the constructor exists is not enough.
+
+**On-device recognition** (`src/workers/whisper.worker.ts`) is the fallback, and
+is also selectable anywhere: Whisper runs locally through transformers.js, on
+WebGPU where available and WebAssembly otherwise. The model is ~40 MB, fetched
+once from Hugging Face and then served from the browser cache; after that the
+audio never leaves the machine.
+
+Whisper is not a streaming model, so live captions come from re-running it over
+the growing utterance roughly every 1.5 s and replacing the interim text. A
+stretch of silence, or a 10-second cap, commits the utterance and starts the
+next — which is what keeps each pass fast. Expect phrases to land a beat behind
+you rather than word by word, and expect lower accuracy than a cloud recogniser,
+particularly on names.
 
 Typing is always available on every page, in every browser.
 
@@ -134,8 +146,10 @@ to the recogniser's own finals (breath groups) and then to discourse markers.
 ## Stack
 
 Vite · React 19 · TypeScript · Tailwind v4 · react-router 7 · Vitest ·
-`compromise` (part-of-speech tagging) · `vader-sentiment`. Both libraries load
-as lazy chunks, so routes that do not need them never download them.
+`compromise` (part-of-speech tagging) · `vader-sentiment` ·
+`@huggingface/transformers` (on-device Whisper). All three load as lazy chunks —
+and Whisper only inside a worker, spawned on demand — so routes that do not need
+them never download them.
 
 ## History
 
