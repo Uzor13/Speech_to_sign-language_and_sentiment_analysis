@@ -18,16 +18,16 @@ import { PermissionHelp } from './PermissionHelp';
  * two live recognisers must not share one instance.
  */
 export function SpeechCapture({ lang = 'en-US' }: { lang?: string }) {
-  const { setText, clear } = useTranscript();
+  const { text, setText, clear } = useTranscript();
   const speech = useSpeechRecognition({ lang });
 
-  // Mirror the live transcript into shared state as it grows. In an effect,
-  // not during render — updating another component mid-render is a React
-  // error, not just a warning.
-  const live = speech.transcript;
+  // Mirror *finalised* speech into shared state. Only finals: mirroring the
+  // interim rewrite as well would re-run the whole sign and sentiment pipeline
+  // on every partial word.
+  const finals = speech.finalTranscript;
   useEffect(() => {
-    if (live) setText(live, 'speech');
-  }, [live, setText]);
+    if (finals) setText(finals, 'speech');
+  }, [finals, setText]);
 
   const reset = () => {
     speech.reset();
@@ -40,12 +40,8 @@ export function SpeechCapture({ lang = 'en-US' }: { lang?: string }) {
 
       {speech.isSupported && (
         <div className="flex flex-wrap items-center gap-3">
-          <MicButton
-            listening={speech.isListening}
-            onStart={speech.start}
-            onStop={speech.stop}
-          />
-          <Button variant="ghost" onClick={reset} disabled={!speech.transcript}>
+          <MicButton listening={speech.isListening} onStart={speech.start} onStop={speech.stop} />
+          <Button variant="ghost" onClick={reset} disabled={!text && !speech.transcript}>
             Clear
           </Button>
           {speech.status === 'requesting' && (
@@ -57,18 +53,26 @@ export function SpeechCapture({ lang = 'en-US' }: { lang?: string }) {
       {speech.error && <PermissionHelp error={speech.error} />}
 
       <TranscriptView
-        segments={speech.segments}
+        text={text}
         interim={speech.interimTranscript}
         listening={speech.isListening}
       />
 
-      {speech.isSupported ? (
+      {/*
+        Always offered, not just when the microphone is missing. Plenty of
+        reasons to type on a page built around speech: a quiet room, a
+        misheard word to correct, or simply trying it out.
+      */}
+      <TranscriptInput
+        onSubmit={(value) => setText(value, 'typed')}
+        label={speech.isSupported ? 'Or type it instead' : 'Type instead'}
+      />
+
+      {speech.isSupported && (
         <p className="text-xs text-slate-400">
           Recognition runs through your browser. Chrome sends the audio to Google to transcribe
           it, so this needs an internet connection — nothing is sent anywhere by this app itself.
         </p>
-      ) : (
-        <TranscriptInput onSubmit={(value) => setText(value, 'typed')} />
       )}
     </div>
   );

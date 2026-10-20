@@ -6,6 +6,7 @@ import { Banner } from '@/components/ui/Banner';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { LetterFrame } from '@/components/signs/LetterFrame';
+import { HandShapeSvg } from '@/components/signs/HandShapeSvg';
 import { useSignManifest } from '@/hooks/useSignManifest';
 import { getDialect } from '@/lib/gloss/dialects';
 
@@ -108,30 +109,44 @@ export default function SignLibraryPage() {
         >
           <p className="mb-3 text-sm text-ink-soft">
             {dialect.label} uses a {dialect.alphabet.twoHanded ? 'two-handed' : 'one-handed'}{' '}
-            alphabet. Letters without an image are drawn as a card with the handshape described
-            — add images to <code className="text-xs">public/signs/letters/</code> and list them
-            under <code className="text-xs">letters.available</code> to replace them.
+            alphabet. These are schematic diagrams drawn by the app, not photographs — enough to
+            see the shape and tell the letters apart. Drop real images into{' '}
+            <code className="text-xs">public/signs/letters/</code> and list them under{' '}
+            <code className="text-xs">letters.available</code> to replace them. Pick a letter to
+            see it larger.
           </p>
 
-          <ul className="flex flex-wrap gap-1.5">
-            {letters.map((ch) => (
-              <li key={ch}>
-                <button
-                  type="button"
-                  onClick={() => setLetter(ch === letter ? null : ch)}
-                  aria-pressed={ch === letter}
-                  className={`h-9 w-9 rounded-md font-mono text-sm transition-colors ${
-                    ch === letter
-                      ? 'bg-brand-500 text-white'
-                      : registry.letterSrc(ch)
-                        ? 'bg-brand-50 text-brand-700 hover:bg-brand-100'
-                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                  }`}
-                >
-                  {ch.toUpperCase()}
-                </button>
-              </li>
-            ))}
+          <ul className="grid grid-cols-5 gap-2 sm:grid-cols-7">
+            {letters.map((ch) => {
+              const image = registry.letterSrc(ch);
+              const selected = ch === letter;
+              return (
+                <li key={ch}>
+                  <button
+                    type="button"
+                    onClick={() => setLetter(selected ? null : ch)}
+                    aria-pressed={selected}
+                    aria-label={`Letter ${ch.toUpperCase()}`}
+                    className={`flex w-full flex-col items-center gap-1 rounded-lg p-2 transition-colors ${
+                      selected
+                        ? 'bg-brand-500 text-white'
+                        : 'bg-slate-50 text-brand-500 hover:bg-brand-50'
+                    }`}
+                  >
+                    {image ? (
+                      <img src={image} alt="" className="h-10 w-auto" />
+                    ) : (
+                      <HandShapeSvg letter={ch} className="h-10 w-auto" />
+                    )}
+                    <span
+                      className={`font-mono text-xs ${selected ? 'text-white' : 'text-ink-soft'}`}
+                    >
+                      {ch.toUpperCase()}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
 
           {letter && (

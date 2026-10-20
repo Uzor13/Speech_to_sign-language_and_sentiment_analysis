@@ -2,7 +2,6 @@ import { PageHeading } from '@/components/layout/PageHeading';
 import { SpeechCapture } from '@/components/speech/SpeechCapture';
 import { SignPipeline } from '@/components/signs/SignPipeline';
 import { SentimentPanel } from '@/components/sentiment/SentimentPanel';
-import { TranscriptInput } from '@/components/speech/TranscriptInput';
 import { useTranscript } from '@/state/TranscriptContext';
 
 /**
@@ -11,7 +10,7 @@ import { useTranscript } from '@/state/TranscriptContext';
  * same three blocks, so there is one implementation of each, not four.
  */
 export default function LivePage() {
-  const { text, segments, setText } = useTranscript();
+  const { text, segments } = useTranscript();
 
   return (
     <div>
@@ -25,9 +24,6 @@ export default function LivePage() {
           <section className="lg:col-span-1">
             <h2 className="sr-only">Speech</h2>
             <SpeechCapture />
-            <div className="mt-4">
-              <TranscriptInput onSubmit={(value) => setText(value, 'typed')} label="Or type it" />
-            </div>
           </section>
 
           <section className="lg:col-span-2">

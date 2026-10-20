@@ -50,9 +50,17 @@ list them under `letters.available`; they replace the drawn handshape cards
 automatically.
 
 **The app works with no assets at all.** With an empty manifest every word is
-fingerspelled, using cards that describe each handshape. That is a working
-state, not a broken one — every clip you add is an upgrade, never a
-prerequisite.
+fingerspelled, and the handshape for each letter is *drawn* as an SVG diagram
+(`src/components/signs/handshapes.ts` configures one parametric hand for all 26
+letters). So it shows you the sign rather than only naming it, with nothing in
+the repository. That is a working state, not a broken one — every clip you add
+is an upgrade, never a prerequisite.
+
+Those drawings are schematics, not photographs. They are good enough to see the
+shape and tell most letters apart, but the closed-fist letters — A, E, M, N, S
+and T — differ only in thumb position and are genuinely hard to distinguish at
+small sizes. For teaching the alphabet properly, add real letter images; they
+take precedence automatically.
 
 ## How it works
 

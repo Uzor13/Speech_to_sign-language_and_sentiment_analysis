@@ -1,3 +1,6 @@
+import { HandShapeSvg } from './HandShapeSvg';
+import { getHandShape } from './handshapes';
+
 interface LetterFrameProps {
   letter: string;
   /** Present only once a letter image has been added to public/signs/letters. */
@@ -11,28 +14,40 @@ interface LetterFrameProps {
 /**
  * The renderer that always works.
  *
- * With no assets in the repository at all, this is what the whole app falls
- * back to — a large letter plus the handshape description, so it still teaches
- * something. The moment a letter image is added to the manifest it is used
- * instead, with no code change.
+ * With no assets in the repository at all, this still *shows* the sign: the
+ * handshape is drawn as an SVG diagram, with the letter and a description
+ * beside it. A real letter image, once added to the manifest, takes
+ * precedence over the drawing.
  */
 export function LetterFrame({ letter, src, description, position, word }: LetterFrameProps) {
   const upper = letter.toUpperCase();
+  const drawable = getHandShape(letter) !== undefined;
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
       {src ? (
         <img
           src={src}
-          alt={`The ASL handshape for the letter ${upper}`}
+          alt={`The handshape for the letter ${upper}`}
           className="max-h-56 object-contain"
         />
       ) : (
-        <div
-          aria-hidden="true"
-          className="flex h-40 w-40 items-center justify-center rounded-2xl bg-brand-50 ring-1 ring-brand-200"
-        >
-          <span className="font-display text-7xl font-semibold text-brand-600">{upper}</span>
+        <div className="flex items-center gap-5">
+          {drawable && (
+            <div className="rounded-2xl bg-white p-3 ring-1 ring-brand-200">
+              <HandShapeSvg
+                letter={letter}
+                title={`The handshape for the letter ${upper}`}
+                className="h-36 w-auto text-brand-500"
+              />
+            </div>
+          )}
+          <div
+            aria-hidden="true"
+            className="flex h-24 w-24 items-center justify-center rounded-2xl bg-brand-50 ring-1 ring-brand-200"
+          >
+            <span className="font-display text-5xl font-semibold text-brand-600">{upper}</span>
+          </div>
         </div>
       )}
 

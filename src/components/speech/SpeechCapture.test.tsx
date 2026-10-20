@@ -78,6 +78,28 @@ describe('SpeechCapture', () => {
     vi.unstubAllGlobals();
   });
 
+  it('lets you type even when the microphone works', () => {
+    // The typing box used to appear only when speech was unsupported, which
+    // left no way to type at all in Chrome.
+    const recognition = new FakeSpeechRecognition();
+    vi.stubGlobal('SpeechRecognition', function () {
+      return recognition;
+    });
+
+    renderCapture();
+
+    expect(screen.getByRole('button', { name: /start listening/i })).toBeInTheDocument();
+
+    const box = screen.getByLabelText(/or type it instead/i);
+    fireEvent.change(box, { target: { value: 'typed while the mic works' } });
+    fireEvent.click(screen.getByRole('button', { name: /use this text/i }));
+
+    expect(screen.getByTestId('shared')).toHaveTextContent('typed while the mic works');
+    expect(screen.getByLabelText('Transcript')).toHaveTextContent('typed while the mic works');
+
+    vi.unstubAllGlobals();
+  });
+
   it('surfaces a blocked microphone with recovery instructions', () => {
     const recognition = new FakeSpeechRecognition();
     vi.stubGlobal('SpeechRecognition', function () {
